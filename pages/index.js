@@ -38,12 +38,10 @@ export default function Home() {
           />
           <input type="submit" value="Generate product description" />
         </form>
-        <div className={styles.result}>
-          //TODO create a card that shows the prompt and the response
-          {result}
-          //TODO Find a way to store old prompts and descriptions
-        </div>
+        <div className={styles.result}>{result}</div>
       </main>
     </div>
   );
 }
+//TODO create a card that shows the prompt and the response
+//TODO Find a way to store old prompts and descriptions
