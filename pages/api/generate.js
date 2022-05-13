@@ -17,8 +17,12 @@ export default async function (req, res) {
 }
 
 function generateDescription(product) {
-  const capitalizedProduct =
-    product[0].toUpperCase() + product.slice(1).toLowerCase();
+  const capitalizedProduct = product.split(" ");
+
+  for (let i = 0; i < capitalizedProduct.length; i++) {
+    capitalizedProduct[i] =
+      capitalizedProduct[i][0].toUpperCase() + capitalizedProduct[i].substr(1);
+  }
   return `Generate a product description explanation for the following product:
     
     Product: Samsung Galaxy S22
