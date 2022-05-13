@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
-import "./index.css";
+import styles from "./index.module.css";
 
 export default function Home() {
   const [productInput, setProductInput] = useState("");
@@ -20,11 +20,26 @@ export default function Home() {
     setProductInput("");
   }
   return (
-    <div className="container">
+    <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Generate Product description</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <main className={styles.main}>
+        <h3>Generate a Product Description</h3>
+        <form onSubmit={onSubmit}>
+          <input
+            type="text"
+            name="product"
+            placeholder="Enter a product name"
+            value={productInput}
+            onChange={(event) => setProductInput(event.target.value)}
+          />
+          <input type="submit" value="Generate product description" />
+        </form>
+        <div className={styles.result}>{result}</div>
+      </main>
     </div>
   );
 }

@@ -5,7 +5,7 @@
   font-size: 16px;
   line-height: 24px;
   color: #353740;
-  font-family: "ColfaxAI", Helvetica, sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 .main {
   display: flex;
@@ -50,4 +50,10 @@
 .main .result {
   font-weight: bold;
   margin-top: 40px;
+  width: 50%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: #10a37f;
+  border: 2px solid #202123;
+  color: #fff;
 }
