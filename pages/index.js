@@ -5,6 +5,20 @@ import styles from "./index.module.css";
 export default function Home() {
   const [productInput, setProductInput] = useState("");
   const [result, setResult] = useState();
+  const [things, setThings] = useState([{ Product: "", Description: "" }]);
+  console.log("things:", things);
+  const productList = things.map((thing, index) => (
+    <div className={styles.result} key={index}>
+      <ul>
+        <li>
+          <label>Product:</label>
+          <p>{thing.Product}</p>
+          <label>Description:</label>
+          <p>{thing.Description}</p>
+        </li>
+      </ul>
+    </div>
+  ));
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -15,8 +29,11 @@ export default function Home() {
       },
       body: JSON.stringify({ product: productInput }),
     });
+
     const data = await response.json();
+    console.log("data:", data);
     setResult(data.result);
+    setThings([{ Product: productInput, Description: result }, ...things]);
     setProductInput("");
   }
   return (
@@ -38,7 +55,7 @@ export default function Home() {
           />
           <input type="submit" value="Generate product description" />
         </form>
-        <div className={styles.result}>{result}</div>
+        {productList}
       </main>
     </div>
   );
