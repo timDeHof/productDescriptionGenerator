@@ -5,19 +5,20 @@ import styles from "./index.module.css";
 export default function Home() {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
+  const [isRefreshPage, setIsRefreshPage] = useState(0);
   const [listings, setListings] = useState([{ Product: "", Description: "" }]);
 
   useEffect(() => {
-    fetchDescription();
     setListings([
       { Product: productName, Description: description },
       ...listings,
     ]);
-    console.log("listings:", listings);
-  }, []);
+  }, [isRefreshPage]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     fetchDescription();
+    console.log("productName:", productName);
   };
 
   async function fetchDescription() {
@@ -31,14 +32,15 @@ export default function Home() {
     const data = await response.json();
     console.log("data:", data);
     setDescription(data.result);
-    setProductName("");
+
+    setIsRefreshPage(Math.random());
   }
   const productList = listings.map((thing, index) => (
     <div className={styles.result} key={index}>
       <ul>
         <li>
           <label>Product:</label>
-          <p>{thing.Product}</p>
+          <p>{thing.product}</p>
           <label>Description:</label>
           <p>{thing.Description}</p>
         </li>
