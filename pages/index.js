@@ -1,13 +1,39 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./index.module.css";
 
 export default function Home() {
-  const [productInput, setProductInput] = useState("");
-  const [result, setResult] = useState();
-  const [things, setThings] = useState([{ Product: "", Description: "" }]);
-  console.log("things:", things);
-  const productList = things.map((thing, index) => (
+  const [productName, setProductName] = useState("");
+  const [description, setDescription] = useState("");
+  const [listings, setListings] = useState([{ Product: "", Description: "" }]);
+
+  useEffect(() => {
+    fetchDescription();
+    setListings([
+      { Product: productName, Description: description },
+      ...listings,
+    ]);
+    console.log("listings:", listings);
+  }, []);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    fetchDescription();
+  };
+
+  async function fetchDescription() {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ product: productName }),
+    });
+    const data = await response.json();
+    console.log("data:", data);
+    setDescription(data.result);
+    setProductName("");
+  }
+  const productList = listings.map((thing, index) => (
     <div className={styles.result} key={index}>
       <ul>
         <li>
@@ -20,22 +46,6 @@ export default function Home() {
     </div>
   ));
 
-  async function onSubmit(event) {
-    event.preventDefault();
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ product: productInput }),
-    });
-
-    const data = await response.json();
-    console.log("data:", data);
-    setResult(data.result);
-    setThings([{ Product: productInput, Description: result }, ...things]);
-    setProductInput("");
-  }
   return (
     <div>
       <Head>
@@ -45,15 +55,17 @@ export default function Home() {
 
       <main className={styles.main}>
         <h3>Generate a Product Description</h3>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="product"
             placeholder="Enter a product name"
-            value={productInput}
-            onChange={(event) => setProductInput(event.target.value)}
+            value={productName}
+            onChange={(event) => setProductName(event.target.value)}
           />
-          <input type="submit" value="Generate product description" />
+          <button type="submit" value="Generate product description">
+            Generate product description
+          </button>
         </form>
         {productList}
       </main>
