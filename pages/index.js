@@ -6,19 +6,19 @@ export default function Home() {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [isRefreshPage, setIsRefreshPage] = useState(0);
-  const [listings, setListings] = useState([{ Product: "", Description: "" }]);
+  const [listings, setListings] = useState([]);
 
   useEffect(() => {
     setListings([
       { Product: productName, Description: description },
       ...listings,
     ]);
+    setProductName("");
   }, [isRefreshPage]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     fetchDescription();
-    console.log("productName:", productName);
   };
 
   async function fetchDescription() {
@@ -30,23 +30,23 @@ export default function Home() {
       body: JSON.stringify({ product: productName }),
     });
     const data = await response.json();
-    console.log("data:", data);
     setDescription(data.result);
-
     setIsRefreshPage(Math.random());
   }
-  const productList = listings.map((thing, index) => (
-    <div className={styles.result} key={index}>
-      <ul>
-        <li>
-          <label>Product:</label>
-          <p>{thing.product}</p>
-          <label>Description:</label>
-          <p>{thing.Description}</p>
-        </li>
-      </ul>
-    </div>
-  ));
+  const productList = listings.map((thing, index) => {
+    return (
+      <div className={styles.result} key={index}>
+        <ul>
+          <li>
+            <label>Product:</label>
+            <p>{thing.Product}</p>
+            <label>Description:</label>
+            <p>{thing.Description}</p>
+          </li>
+        </ul>
+      </div>
+    );
+  });
 
   return (
     <div>
@@ -54,7 +54,6 @@ export default function Home() {
         <title>Generate Product description</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main className={styles.main}>
         <h3>Generate a Product Description</h3>
         <form onSubmit={handleSubmit}>
@@ -74,5 +73,3 @@ export default function Home() {
     </div>
   );
 }
-//TODO create a card that shows the prompt and the response
-//TODO Find a way to store old prompts and descriptions
